@@ -39,7 +39,13 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/materialize.js",
+              "src/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js",
+              "src/assets/js/init.js",
+              "src/assets/js/settings.js",
+              "src/assets/js/scripts.js"
+            ]
           },
           "configurations": {
             "production": {
