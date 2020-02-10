@@ -6,29 +6,41 @@
 
   <div class="container login-area">
     <div class="section">
-
+      <form [formGroup]="loginForm" (submit)="login()">
     <div class="row ">
                 <div class="col s12 pad-0"><h5 class="bot-20 sec-tit center white-text">Login</h5>
       <div class="row">
 
         <div class="input-field col s10 offset-s1">
-          <input id="email3" type="email" class="validate">
+          <input formControlName="email" id="email3" type="email" class="validate">
           <label for="email3">Email</label>
         </div>
-     
+        <div class="validation-errors col s10 offset-s1">
+          <ng-container *ngFor="let validation of validation_messages.field">
+            <div class="error-message" *ngIf="loginForm.get('email').hasError(validation.type) && (loginForm.get('email').dirty || loginForm.get('email').touched || loginForm.get('email').hasError('email'))">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
       </div>
 
       <div class="row">
 
         <div class="input-field col s10 offset-s1">
-          <input id="pass3" type="password" class="validate">
+          <input formControlName="password" id="pass3" type="password" class="validate">
           <label for="pass3">Password</label>
         </div>
-     
+        <div class="validation-errors col s10 offset-s1">
+          <ng-container *ngFor="let validation of validation_messages.field">
+            <div class="error-message" *ngIf="loginForm.get('password').hasError(validation.type) && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
       </div>
 
       <div class="row center">
-        <a class="waves-effect waves-light btn-large bg-primary">Login</a>
+        <button [disabled]="hideButton" class="waves-effect waves-light btn-large bg-primary" type="submit">Login <ion-spinner *ngIf="hideButton"  name="bubbles"></ion-spinner></button>
         <div class="spacer"></div>
         <div class="links">
              <a routerLink="/forgot-password" class='waves-effect'>             Forgot Password
@@ -47,7 +59,7 @@
     </div>
     </div>
     
-
+  </form>
 
     </div>
   </div>

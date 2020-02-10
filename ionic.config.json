@@ -1,5 +1,7 @@
 {
   "name": "swapspotapp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
