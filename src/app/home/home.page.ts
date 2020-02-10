@@ -10,9 +10,19 @@ export class HomePage implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    document.addEventListener("DOMContentLoaded", function(){
-      jQuery('.preloader-background').delay(10).fadeOut('slow');
-    });
+    jQuery(document).ready(function(){
+
+      jQuery(".carousel-fullscreen.carousel-slider").carousel({
+        fullWidth: true,
+        indicators: true,
+      }).css("height", jQuery(window).height());
+      setTimeout(autoplay, 3500);
+      function autoplay() {
+        jQuery(".carousel-fullscreen.carousel-slider").carousel("next");
+	      setTimeout(autoplay, 3500);
+      }
+
+  });
   }
 
 }

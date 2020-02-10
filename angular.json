@@ -40,6 +40,7 @@
               }
             ],
             "scripts": [
+              "src/assets/js/jquery-2.2.4.min.js",
               "src/assets/js/materialize.js",
               "src/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js",
               "src/assets/js/init.js",
