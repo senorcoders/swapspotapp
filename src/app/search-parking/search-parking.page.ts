@@ -1,29 +1,22 @@
-import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {
-  GoogleMaps,
-  GoogleMap,
-  GoogleMapsEvent,
-  Marker,
-  GoogleMapsAnimation,
-  MyLocation
-} from '@ionic-native/google-maps';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { GoogleMap, GoogleMaps, MyLocation, Marker, GoogleMapsAnimation, GoogleMapsEvent } from '@ionic-native/google-maps';
 import { LoadingController, ToastController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
+
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  selector: 'app-search-parking',
+  templateUrl: './search-parking.page.html',
+  styleUrls: ['./search-parking.page.scss'],
 })
-export class Tab1Page {
+export class SearchParkingPage implements OnInit {
   map: GoogleMap;
   loading: any;
-  constructor(public zone: NgZone, public geolocation: Geolocation,
+  constructor(public zone: NgZone, 
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     private platform: Platform,
-    private router: Router) {
-  } 
+    private router: Router) { }
+
   async ngOnInit() {
     // Since ngOnInit() is executed before `deviceready` event,
     // you have to wait the event.
@@ -31,7 +24,7 @@ export class Tab1Page {
     await this.loadMap();
   }  
   loadMap() {
-    this.map = GoogleMaps.create('map_canvas', {
+    this.map = GoogleMaps.create('map_canvas2', {
       camera: {
         target: {
           lat: 43.0741704,
@@ -97,8 +90,5 @@ export class Tab1Page {
     toast.present();
   }
 
-  searchParking(){
-    this.router.navigate(['/search-parking']);
-    
-  }
+
 }
