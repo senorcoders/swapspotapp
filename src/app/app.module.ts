@@ -12,6 +12,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { Interceptor } from './interceptor/token.interceptor';
 import { IonicStorageModule } from '@ionic/storage';
 import { LoginService } from './login.service';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +23,7 @@ import { LoginService } from './login.service';
     HttpClientModule,
     SplashScreen,
     LoginService,
+    Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,
