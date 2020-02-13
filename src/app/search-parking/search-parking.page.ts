@@ -1,7 +1,8 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import { GoogleMap, GoogleMaps, MyLocation, Marker, GoogleMapsAnimation, GoogleMapsEvent } from '@ionic-native/google-maps';
-import { LoadingController, ToastController, Platform } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { LoadingController, ToastController, NavController } from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { RestService } from '../rest.service';
+declare var google;
 
 @Component({
   selector: 'app-search-parking',
@@ -9,86 +10,87 @@ import { Router } from '@angular/router';
   styleUrls: ['./search-parking.page.scss'],
 })
 export class SearchParkingPage implements OnInit {
-  map: GoogleMap;
-  loading: any;
+  @ViewChild('map', {static:false}) mapContainer: ElementRef;
+  map: any;
+  parkings:any = [];
+  myCoords:any;
   constructor(public zone: NgZone, 
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-    private platform: Platform,
-    private router: Router) { }
+    private navCtrl: NavController,
+    private rest: RestService,
+    private geolocation: Geolocation) { }
 
-  async ngOnInit() {
-    // Since ngOnInit() is executed before `deviceready` event,
-    // you have to wait the event.
-    await this.platform.ready();
-    await this.loadMap();
-  }  
-  loadMap() {
-    this.map = GoogleMaps.create('map_canvas2', {
-      camera: {
-        target: {
-          lat: 43.0741704,
-          lng: -89.3809802
-        },
-        zoom: 18,
-        tilt: 30
-      }
-    });
-    this.loadLocation();
+    async ngOnInit() {
+      await this.getCurrentLocation();
+      await this.getParkings();
+      this.displayGoogleMap();
+      this.getMarkers();
+    }
 
-  } 
+    goBack(){
 
-  async loadLocation() {
-    this.map.clear();
+      this.navCtrl.back();
+    }
 
-    this.loading = await this.loadingCtrl.create({
-      message: 'Please wait...'
-    });
-    await this.loading.present();
+    getCurrentLocation(){
+      return new Promise((resolve, reject) => {
+      this.geolocation.getCurrentPosition().then((resp) => {
+        this.myCoords = resp.coords;
+        console.log("mycoords", this.myCoords);
+        resolve();
+        // resp.coords.longitude
+       }).catch((error) => {
+         console.log('Error getting location', error);
+         reject();
+       });
+      })
+    }
 
-    // Get the location of you
-    this.map.getMyLocation().then((location: MyLocation) => {
-      this.loading.dismiss();
-      console.log(JSON.stringify(location, null ,2));
-
-      // Move the map camera to the location with animation
-      this.map.animateCamera({
-        target: location.latLng,
-        zoom: 17,
-        tilt: 30
-      });
-
-      // add a marker
-      let marker: Marker = this.map.addMarkerSync({
-        title: 'I am here!',
-        snippet: 'This is my current location',
-        position: location.latLng,
-        animation: GoogleMapsAnimation.BOUNCE
-      });
-
-      // show the infoWindow
-      marker.showInfoWindow();
-
-      // If clicked it, display the alert
-      marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-        this.showToast('clicked!');
-      });
-    })
-    .catch(err => {
-      this.loading.dismiss();
-      this.showToast(err.error_message);
+    getParkings(){
+   
+  
+      return new Promise((resolve, reject) => {
+        this.rest.getData(`/api/v1/getnearby?x=${this.myCoords.latitude}&y=${this.myCoords.longitude}`).subscribe(data =>{
+          console.log("Parkings", data);
+          this.parkings = data;
+          resolve();
+        }, error => reject())
+   
+   
     });
   }
-
-  async showToast(message: string) {
-    let toast = await this.toastCtrl.create({
-      message: message,
-      duration: 2000,
-      position: 'middle'
-    });
-
-    toast.present();
-  }
-
+  
+    displayGoogleMap() {
+      const latLng = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.longitude);
+  
+      const mapOptions = {
+        center: latLng,
+        disableDefaultUI: true,
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+  
+      this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
+      const position = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.latitude);
+      const parkingMarker = new google.maps.Marker({ position, title: "My current position"});
+      parkingMarker.setMap(this.map);
+    }
+  
+    getMarkers() {
+      console.log("AQUI", this.parkings.length);
+      this.parkings.forEach(element => {
+        this.addMarkersToMap(element);
+      });
+     
+    }
+  
+    addMarkersToMap(parking) {
+      console.log(parking);
+      const position = new google.maps.LatLng(parking.x, parking.y);
+      const parkingMarker = new google.maps.Marker({ position, title: "Parking", icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png'});
+      parkingMarker.setMap(this.map);
+    }
+ 
 
 }

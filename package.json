@@ -72,9 +72,7 @@
   "cordova": {
     "plugins": {
       "cordova-sqlite-storage": {},
-      "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
-      },
+      "cordova-plugin-geolocation": {},
       "cordova-plugin-googlemaps": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
