@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: 'http://spotswapapi.senorcoders.com'
+  apiURL: 'https://spotswapapi.senorcoders.com'
 };
 
 /*

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiURL: 'http://spotswapapi.senorcoders.com'
+  apiURL: 'https://spotswapapi.senorcoders.com'
 
 };
