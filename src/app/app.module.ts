@@ -13,11 +13,13 @@ import { Interceptor } from './interceptor/token.interceptor';
 import { IonicStorageModule } from '@ionic/storage';
 import { LoginService } from './login.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
+import { AutoCompleteModule } from 'ionic4-auto-complete';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), HttpClientModule  ],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), 
+    HttpClientModule, AutoCompleteModule  ],
   providers: [
     StatusBar,
     HttpClientModule,

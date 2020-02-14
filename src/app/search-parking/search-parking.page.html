@@ -9,15 +9,15 @@
 </ion-header>
 
 <ion-content>
-  <div #map id="map"></div>
   <ion-row>
     <ion-col size="12" class="search-page">
       <div class="search-bar">
         <nav class="ui-forms">
             <div class="nav-wrapper">
               <form>
+
                 <div class="input-field">
-                  <input id="search" type="search" placeholder="Address of destination" required="">
+                  <input #addresstext id="search" type="search" placeholder="Address of destination" required="">
                   <label for="search" class="active"><i class="mdi mdi-magnify"></i></label>
                   <i class="material-icons mdi mdi-close"></i>
                 </div>
@@ -26,9 +26,8 @@
         </nav>
         </div>
           </ion-col>
-    <ion-col col-12>
-      <ion-button expand="full" > Search for parking</ion-button>
-    </ion-col>
+  
   </ion-row>
- 
+  <div #map id="map"></div>
+
 </ion-content>

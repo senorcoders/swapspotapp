@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^1.1.0",
     "@angular/common": "~8.1.2",
     "@angular/core": "~8.1.2",
     "@angular/forms": "~8.1.2",
@@ -31,6 +32,8 @@
     "cordova-plugin-googlemaps": "^2.6.2",
     "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",
+    "ionic2-google-places-autocomplete": "^1.0.2",
+    "ionic4-auto-complete": "^2.6.0",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
@@ -46,6 +49,7 @@
     "@angular/language-service": "~8.1.2",
     "@ionic/angular-toolkit": "^2.1.1",
     "@ionic/lab": "3.1.0",
+    "@types/googlemaps": "^3.39.2",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
