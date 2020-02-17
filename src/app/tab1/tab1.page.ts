@@ -37,7 +37,7 @@ export class Tab1Page {
           lat: 43.0741704,
           lng: -89.3809802
         },
-        zoom: 18,
+        zoom: 19,
         tilt: 30
       }
     });
@@ -61,7 +61,7 @@ export class Tab1Page {
       // Move the map camera to the location with animation
       this.map.animateCamera({
         target: location.latLng,
-        zoom: 17,
+        zoom: 19,
         tilt: 30
       });
 

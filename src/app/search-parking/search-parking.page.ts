@@ -87,17 +87,18 @@ export class SearchParkingPage implements OnInit {
   }
   
     displayGoogleMap() {
-      const latLng = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.longitude);
+      const latLng = new google.maps.LatLng(33.186148, this.myCoords.longitude);
   
       const mapOptions = {
         center: latLng,
         disableDefaultUI: true,
-        zoom: 12,
+        zoom: 19,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
   
       this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
-      const position = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.latitude);
+      const position = new google.maps.LatLng(33.186148, this.myCoords.longitude);
+      console.log("Lat: " + this.myCoords.latitude);
       const parkingMarker = new google.maps.Marker({ position, title: "My current position"});
       parkingMarker.setMap(this.map);
     }
@@ -113,6 +114,7 @@ export class SearchParkingPage implements OnInit {
     addMarkersToMap(parking) {
       console.log(parking);
       const position = new google.maps.LatLng(parking.x, parking.y);
+      const mySpot = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.longitude);
       const parkingMarker = new google.maps.Marker({ position, title: "Parking", icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png'});
       parkingMarker.setMap(this.map);
     }
