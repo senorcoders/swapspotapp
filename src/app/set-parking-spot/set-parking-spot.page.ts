@@ -96,4 +96,7 @@ export class SetParkingSpotPage implements OnInit {
     this.navCtrl.back();
   }
 
+  unsubscribe(){
+    this.rest.stopWatchingPosition();
+  }
 }

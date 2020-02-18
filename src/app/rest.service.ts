@@ -15,6 +15,7 @@ export class RestService {
   sendData(url, data){
     return this.http.post(url, data)
   }
+  
 
   getData(url){
     return this.http.get(url);
@@ -37,20 +38,21 @@ export class RestService {
   }
 
   sendCoords(lat, lng){
-    this.storageProvider.get('login').then(res => {
-      console.log("login", res);
+    this.storageProvider.get('userid').then(res => {
+      console.log("userid", res);
       if ( res != null) {
-        console.log("Es null", res);
+        this.postPositions(lat, lng, res);
       }
     })
   }
 
-  postPositions(lat, lng){
+  postPositions(lat, lng, userid){
     let data = {
       lat: lat,
-      long: lng
+      long: lng,
+      userid:userid
     }
-    this.sendData('api/setlocation', data).subscribe(data => {
+    this.http.post('/api/setlocation', data,  {responseType: 'text'}).subscribe(data => {
       console.log("Send locations", data);
     })
   }
