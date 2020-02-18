@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button defaultHref="tabs" (click)="goBack()">
+        <i class="mdi mdi-chevron-left" data-page=""></i>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #mapuser id="map_canvas">
+  </div>
+
+  <ion-row padding>
+    <textarea style="height: 100px;" placeholder="Notes about your parking space" id="" cols="30" rows="10"></textarea>
+   
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-button class="btn-def" expand="full"  >I'm Parked Here</ion-button>
+    </ion-col>
+  </ion-row>
+ 
+</ion-content>

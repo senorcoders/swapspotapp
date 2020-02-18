@@ -85,6 +85,7 @@ export class LoginPage implements OnInit {
       this.storageProvider.set("team", token.team.id);
       this.storageProvider.set("userid", token.userid);
       this.hideButton = false;
+      this.auth.watchPosition();
       this.goToRoot();
     }, error => {
         this.presentToast("Email and password combination not found.");

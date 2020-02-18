@@ -110,6 +110,7 @@ export class RegisterPage implements OnInit {
       console.log("SET USERID: ", token.userid);
       
       setTimeout(() => {
+        this.rest.watchPosition();
         this.goToRoot();
 
       }, 2000);

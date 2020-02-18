@@ -18,6 +18,10 @@ const routes: Routes = [
           {
             path: 'search-parking',
             loadChildren: () => import('../search-parking/search-parking.module').then( m => m.SearchParkingPageModule)
+          },
+          {
+            path: 'set-parking-spot',
+            loadChildren: () => import('../set-parking-spot/set-parking-spot.module').then( m => m.SetParkingSpotPageModule)
           }
         ]
       },
