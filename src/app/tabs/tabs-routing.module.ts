@@ -14,6 +14,10 @@ const routes: Routes = [
             path: '',
             loadChildren: () =>
               import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+          },
+          {
+            path: 'search-parking',
+            loadChildren: () => import('../search-parking/search-parking.module').then( m => m.SearchParkingPageModule)
           }
         ]
       },
@@ -21,7 +25,7 @@ const routes: Routes = [
         path: 'tab2',
         children: [
           {
-            path: '',
+            path: '', 
             loadChildren: () =>
               import('../tab2/tab2.module').then(m => m.Tab2PageModule)
           }

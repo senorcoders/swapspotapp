@@ -24,10 +24,6 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
-  },
-  {
-    path: 'search-parking',
-    loadChildren: () => import('./search-parking/search-parking.module').then( m => m.SearchParkingPageModule)
   }
 ];
 @NgModule({

@@ -94,7 +94,8 @@ export class Tab1Page {
   }
 
   searchParking(){
-    this.router.navigate(['/search-parking']);
+    this.router.navigateByUrl('/tabs/tab1/search-parking');
+
     
   }
 }
