@@ -3,6 +3,9 @@ import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { LoadingController, ToastController, Platform } from '@ionic/angular';
 import { RestService } from '../rest.service';
 import { Router } from '@angular/router';
+var socketIOClient = require('socket.io-client');
+var sailsIOClient = require('sails.io.js');
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -25,6 +28,10 @@ export class Tab1Page {
     // Since ngOnInit() is executed before `deviceready` event,
     // you have to wait the event.
     await this.platform.ready();
+
+    var io = sailsIOClient(socketIOClient);
+    io.sails.url = 'http://localhost:1337';
+
     await this.getCurrentLocation();
     await this.getParkings(this.myCoords.latitude, this.myCoords.longitude);
     this.displayGoogleMap();
