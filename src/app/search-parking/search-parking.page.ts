@@ -3,6 +3,8 @@ import { LoadingController, ToastController, NavController } from '@ionic/angula
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { RestService } from '../rest.service';
 import { MapsAPILoader } from '@agm/core';
+import { SailsService } from 'angular2-sails';
+import { environment } from 'src/environments/environment';
 declare const google: any;
 @Component({
   selector: 'app-search-parking',
@@ -22,9 +24,18 @@ export class SearchParkingPage implements OnInit {
     private navCtrl: NavController,
     private rest: RestService,
     private geolocation: Geolocation,
-    private ngZone: NgZone) { }
+    private ngZone: NgZone,
+    private _sailsService:SailsService) { }
 
     async ngOnInit() {
+      this._sailsService.connect(environment.apiURL);
+      let that = this;
+      this._sailsService.get('/location/subscribe', function(data, jwr){
+        console.log("response", data, jwr);
+        that._sailsService.on('new_location', function(entry){
+          console.log("new entry", entry);
+        })
+      })
       await this.getCurrentLocation();
       await this.getParkings(this.myCoords.latitude, this.myCoords.longitude);
       this.displayGoogleMap();
@@ -33,7 +44,7 @@ export class SearchParkingPage implements OnInit {
     ngAfterViewInit() {
       this.getPlaceAutocomplete();
     }
-
+  
     getPlaceAutocomplete(){
       const autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement, {
         types: ['(regions)']

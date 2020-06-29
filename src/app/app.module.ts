@@ -14,12 +14,17 @@ import { IonicStorageModule } from '@ionic/storage';
 import { LoginService } from './login.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { AutoCompleteModule } from 'ionic4-auto-complete';
+import {SailsModule} from "angular2-sails";
 
+import { environment } from 'src/environments/environment';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), 
-    HttpClientModule, AutoCompleteModule  ],
+    HttpClientModule, AutoCompleteModule,   
+    SailsModule.forRoot()
+
+  ],
   providers: [
     StatusBar,
     HttpClientModule,
