@@ -32,7 +32,7 @@ export class SearchParkingPage implements OnInit {
       let that = this;
       this._sailsService.get('/location/subscribe', function(data, jwr){
         console.log("response", data, jwr);
-        that._sailsService.on('new_location', function(entry){
+        that._sailsService.on('new_location').subscribe(entry => {
           console.log("new entry", entry);
         })
       })
