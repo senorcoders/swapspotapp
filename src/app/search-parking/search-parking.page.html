@@ -29,5 +29,16 @@
   
   </ion-row>
   <div #map id="map"></div>
+    <div class="map-popup" [hidden]="!showPopup">
+      <button class="close-popup" (click)="closePopup()"><ion-icon name="close-circle-outline" size="large"></ion-icon></button>
+      <div class="row">
+        <div class="col-lg-6">
+          <button (click)="calculateAndDisplayRoute(tmpCoord)">Drive Here</button>
+        </div>
+        <div class="col-lg-6">
+          <button>Reserve this spot</button>
+        </div>
+      </div>
+    </div>
 
 </ion-content>

@@ -14,10 +14,13 @@ declare const google: any;
 export class SearchParkingPage implements OnInit {
   @ViewChild('map', {static:false}) mapContainer: ElementRef;
   @ViewChild("addresstext", {static:false}) private addresstext: ElementRef;
-
+  directionsService = new google.maps.DirectionsService;
+  directionsDisplay = new google.maps.DirectionsRenderer;
+  tmpCoord:any;
   map: any;
   parkings:any = [];
   myCoords:any;
+  showPopup:boolean = false;
   constructor(public zone: NgZone, 
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
@@ -124,11 +127,56 @@ export class SearchParkingPage implements OnInit {
   
     addMarkersToMap(parking) {
       console.log(parking);
+      let that = this;
       const position = new google.maps.LatLng(parking.x, parking.y);
       const mySpot = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.longitude);
       const parkingMarker = new google.maps.Marker({ position, title: "Parking", icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png'});
+      const contentString = '<div id="content">' +
+      '<div id="siteNotice">' +
+      '</div>' +
+      '<div id="bodyContent">' +
+      '<div class="row"><div class="col-lg-12"><button (click)="calculateAndDisplayRoute('+ parking +')">Drive Here<button></div></div>'+
+      '<div class="row"><div class="col-lg-12"><button>Reserve this parking<button></div></div>'+
+      '</div>' +
+      '</div>';
+  const infowindow = new google.maps.InfoWindow({
+    content: contentString,
+    maxWidth: 400
+  });
+  parkingMarker.addListener('click', function() {
+    // infowindow.open(this.map, parkingMarker);
+    that.showPopup = true;
+    that.tmpCoord = parking;
+
+  });
+
       parkingMarker.setMap(this.map);
     }
  
 
+    calculateAndDisplayRoute(position) {
+      console.log("position", position);
+      const that = this;
+      this.directionsService.route({
+        origin: {
+          lat: this.myCoords.latitude,
+          lng: this.myCoords.longitude
+        } ,
+        destination: {
+          lat: position.x,
+          lng: position.y
+        },
+        travelMode: 'DRIVING'
+      }, (response, status) => {
+        if (status === 'OK') {
+          that.directionsDisplay.setDirections(response);
+        } else {
+          console.log('Directions request failed due to ' + status);
+        }
+      });
+    }
+
+    closePopup(){
+      this.showPopup = false;
+    }
 }
