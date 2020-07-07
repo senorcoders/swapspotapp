@@ -115,6 +115,8 @@ export class SearchParkingPage implements OnInit {
       console.log("Lat: " + this.myCoords.latitude);
       const parkingMarker = new google.maps.Marker({ position, title: "My current position"});
       parkingMarker.setMap(this.map);
+      this.directionsDisplay.setMap(this.map);
+
     }
   
     getMarkers() {
