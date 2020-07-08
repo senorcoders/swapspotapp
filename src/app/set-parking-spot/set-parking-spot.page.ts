@@ -23,7 +23,8 @@ export class SetParkingSpotPage implements OnInit {
   parkingForm:FormGroup;
   userid_st:any;
   hideButton:boolean = false;
-
+  email_st:any;
+  email: FormControl;
   constructor(public zone: NgZone, public geolocation: Geolocation,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
@@ -37,6 +38,7 @@ export class SetParkingSpotPage implements OnInit {
     this.createFormControls();
     this.createRegisterForm();
     await this.getUserInfo();
+    await this.getEmail();
 
     await this.platform.ready();
     
@@ -50,8 +52,20 @@ export class SetParkingSpotPage implements OnInit {
   getUserInfo(){
     return new Promise((resolve, reject) => {
       this.storageProvider.get('userid').then(res => {
+        this.email_st = res;
+        console.log("userid", this.email_st);
+        this.email.setValue(this.email_st);
+
+        resolve();
+      })
+    })
+  }
+
+  getEmail(){
+    return new Promise((resolve, reject) => {
+      this.storageProvider.get('email').then(res => {
         this.userid_st = res;
-        console.log("userid", this.userid_st);
+        console.log("email", this.userid_st);
         this.userid.setValue(this.userid_st);
 
         resolve();
@@ -63,6 +77,7 @@ export class SetParkingSpotPage implements OnInit {
     this.userid = new FormControl('', [Validators.required]); 
     this.lat = new FormControl('', [Validators.required]); 
     this.long = new FormControl('', [Validators.required]); 
+    this.email = new FormControl('', [Validators.required]); 
     this.msg = new FormControl(''); 
 
   }
@@ -72,7 +87,8 @@ export class SetParkingSpotPage implements OnInit {
       userid: this.userid,
       lat: this.lat,
       long: this.long,
-      msg: this.msg
+      msg: this.msg,
+      email: this.email
      
     }, {
       updateOn: 'submit'
@@ -168,7 +184,7 @@ export class SetParkingSpotPage implements OnInit {
   sendData(){
     console.log("What to send")
     this.rest.sendData("/api/addparking", this.parkingForm.value).subscribe(val => {
-      this.presentToast("Your parking has been added");
+      this.presentToast("Your parking has been added. Check yout inbox to see requests.");
       this.hideButton = false;
    
     }, error => {

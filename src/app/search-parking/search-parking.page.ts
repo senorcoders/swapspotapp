@@ -5,6 +5,7 @@ import { RestService } from '../rest.service';
 import { MapsAPILoader } from '@agm/core';
 import { SailsService } from 'angular2-sails';
 import { environment } from 'src/environments/environment';
+import { StorageproviderService } from '../storageprovider.service';
 declare const google: any;
 @Component({
   selector: 'app-search-parking',
@@ -21,6 +22,8 @@ export class SearchParkingPage implements OnInit {
   parkings:any = [];
   myCoords:any;
   showPopup:boolean = false;
+  markerEmail_tmp:any;
+  useremail:any;
   constructor(public zone: NgZone, 
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
@@ -28,9 +31,17 @@ export class SearchParkingPage implements OnInit {
     private rest: RestService,
     private geolocation: Geolocation,
     private ngZone: NgZone,
-    private _sailsService:SailsService) { }
+    private _sailsService:SailsService,
+    private storageProvider: StorageproviderService,
+    private toastController: ToastController) { }
 
     async ngOnInit() {
+      
+      await this.getCurrentLocation();
+      await this.getEmail();
+      await this.getParkings(this.myCoords.latitude, this.myCoords.longitude);
+      this.displayGoogleMap();
+      this.getMarkers();
       this._sailsService.connect(environment.apiURL);
       let that = this;
       this._sailsService.get('/location/subscribe', function(data, jwr){
@@ -38,17 +49,24 @@ export class SearchParkingPage implements OnInit {
         that._sailsService.on('new_location').subscribe(entry => {
           console.log("new entry", entry);
           that.addMarkersToMap({x: entry['lat'], y: entry['long']});
+          that.markerEmail_tmp = entry['email'];
         })
       })
-      await this.getCurrentLocation();
-      await this.getParkings(this.myCoords.latitude, this.myCoords.longitude);
-      this.displayGoogleMap();
-      this.getMarkers();
     }
     ngAfterViewInit() {
       this.getPlaceAutocomplete();
     }
   
+    getEmail(){
+      return new Promise((resolve, reject) => {
+        this.storageProvider.get('email').then(res => {
+          this.useremail = res;
+          console.log("email", this.useremail);
+  
+          resolve();
+        })
+      })
+    }
     getPlaceAutocomplete(){
       const autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement, {
         types: ['(regions)']
@@ -182,5 +200,27 @@ export class SearchParkingPage implements OnInit {
 
     closePopup(){
       this.showPopup = false;
+    }
+
+    sendRequest(){
+      let data = {
+        sender: this.useremail,
+        receiver: this.markerEmail_tmp,
+        message: "Hey. Let's swap spots!"
+      };
+      this.rest.sendData('/api/message', data).subscribe(res => {
+        console.log("mensaje enviado", res);
+        this.closePopup();
+        this.presentToast("Your requests for swap spots has been sent. Check your inbox to see responses.");
+      })
+    }
+
+
+    async presentToast(msg) {
+      const toast = await this.toastController.create({
+        message: msg,
+        duration: 2000
+      });
+      toast.present();
     }
 }
