@@ -1,9 +1,20 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Three
+      Inbox
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+  <!-- Default Segment -->
+<ion-segment (ionChange)="segmentChanged($event)">
+  <ion-segment-button value="received">
+    <ion-label>Received</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="sent">
+    <ion-label>Sent</ion-label>
+  </ion-segment-button>
+</ion-segment>
+</ion-content>
