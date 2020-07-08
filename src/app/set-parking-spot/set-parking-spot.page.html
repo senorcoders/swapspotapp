@@ -11,15 +11,16 @@
 <ion-content>
   <div #mapuser id="map_canvas">
   </div>
-
+<form [formGroup]="parkingForm" (submit)="addParking()">
   <ion-row padding>
-    <textarea style="height: 100px;" placeholder="Notes about your parking space" id="" cols="30" rows="10"></textarea>
+    <textarea  formControlName="msg" style="height: 100px;" placeholder="Notes about your parking space" id="" cols="30" rows="10"></textarea>
    
   </ion-row>
   <ion-row>
     <ion-col>
-      <ion-button class="btn-def" expand="full" (click)="unsubscribe()" >I'm Parked Here</ion-button>
+      <ion-button [disabled]="hideButton" class="btn-def" expand="full" type="submit">I'm Parked Here</ion-button>
     </ion-col>
   </ion-row>
+</form>
  
 </ion-content>

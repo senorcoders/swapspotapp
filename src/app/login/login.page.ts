@@ -84,6 +84,7 @@ export class LoginPage implements OnInit {
       localStorage.setItem("login", token.token.token); // also set it to local storage
       this.storageProvider.set("team", token.team.id);
       this.storageProvider.set("userid", token.userid);
+      this.storageProvider.set("email", this.loginForm.get('email').value);
       this.hideButton = false;
       this.auth.watchPosition();
       this.goToRoot();

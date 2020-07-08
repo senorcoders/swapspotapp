@@ -107,6 +107,7 @@ export class RegisterPage implements OnInit {
       // this.storageProvider.set("team", token.team.id);
       this.storageProvider.set("userid", token.userid);
       this.storageProvider.set("first_time", true);
+      this.storageProvider.set("email", this.registerForm.get('email').value);
       console.log("SET USERID: ", token.userid);
       
       setTimeout(() => {

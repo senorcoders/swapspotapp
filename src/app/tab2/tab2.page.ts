@@ -20,7 +20,8 @@ export class Tab2Page {
   updateForm: FormGroup;
   regex:string='(?=.*)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9_]).{8,20}$';
   hideButton:boolean = false;
-  userid:any;
+  useremail:any;
+  userData:any = [];
   validation_messages = {
     'field': [
         { type: 'required', message: 'Field is required.' },
@@ -39,14 +40,26 @@ export class Tab2Page {
       this.createFormControls();
       this.createupdateForm();
       await this.getUserInfo();
+      this.getCurrentData();
     }
 
     getUserInfo(){
       return new Promise((resolve, reject) => {
-        this.storageProvider.get('userid').then(res => {
-          this.userid = res;
-          console.log("userid", res, this.userid);
+        this.storageProvider.get('email').then(res => {
+          this.useremail = res;
+          console.log("userid", res, this.useremail);
+          resolve();
         })
+      })
+    }
+
+    getCurrentData(){
+      this.rest.sendData('/singleuser', {"email": this.useremail}).subscribe(res => {
+        this.userData = res;
+        console.log("currentuser", this.userData);
+        this.name.setValue(this.userData['name']);
+        this.email.setValue(this.userData['email']);
+        this.birthdate.setValue(this.userData['birthdate']);
       })
     }
     createFormControls(){
@@ -92,14 +105,10 @@ export class Tab2Page {
 
   sendData(){
     console.log("What to send")
-    this.rest.sendData("/user/" + this.userid , this.updateForm.value).subscribe(val => {
-      if(val.hasOwnProperty('message')){
-        this.presentToast(val['message']);
+    this.rest.updateData("/updateuser" , this.updateForm.value).subscribe(val => {
+        this.presentToast("successfully updated");
         this.hideButton = false;
-      }else{
-       
-        this.presentToast("An error ocurred");
-      }
+     
    
     }, error => {
       this.presentToast(error);

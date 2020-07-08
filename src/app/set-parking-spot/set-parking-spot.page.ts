@@ -2,6 +2,8 @@ import { Component, OnInit, NgZone, ViewChild, ElementRef } from '@angular/core'
 import { RestService } from '../rest.service';
 import { Platform, ToastController, LoadingController, NavController } from '@ionic/angular';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { StorageproviderService } from '../storageprovider.service';
 
 @Component({
   selector: 'app-set-parking-spot',
@@ -14,26 +16,76 @@ export class SetParkingSpotPage implements OnInit {
   map: any;
   parkings:any = [];
   myCoords:any;
+  userid:FormControl;
+  lat:FormControl;
+  long:FormControl;
+  msg:FormControl;
+  parkingForm:FormGroup;
+  userid_st:any;
+  hideButton:boolean = false;
+
   constructor(public zone: NgZone, public geolocation: Geolocation,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     private platform: Platform,
     private rest: RestService,
-    private navCtrl: NavController) { }
+    private navCtrl: NavController,
+    private storageProvider: StorageproviderService,
+    private toastController:ToastController) { }
 
   async ngOnInit() {
+    this.createFormControls();
+    this.createRegisterForm();
+    await this.getUserInfo();
+
     await this.platform.ready();
+    
     await this.getCurrentLocation();
     // await this.getParkings(this.myCoords.latitude, this.myCoords.longitude);
     this.displayGoogleMap();
     // this.getMarkers();
+
   }
 
+  getUserInfo(){
+    return new Promise((resolve, reject) => {
+      this.storageProvider.get('userid').then(res => {
+        this.userid_st = res;
+        console.log("userid", this.userid_st);
+        this.userid.setValue(this.userid_st);
+
+        resolve();
+      })
+    })
+  }
+
+  createFormControls(){
+    this.userid = new FormControl('', [Validators.required]); 
+    this.lat = new FormControl('', [Validators.required]); 
+    this.long = new FormControl('', [Validators.required]); 
+    this.msg = new FormControl(''); 
+
+  }
+
+  createRegisterForm(){
+    this.parkingForm = new FormGroup({
+      userid: this.userid,
+      lat: this.lat,
+      long: this.long,
+      msg: this.msg
+     
+    }, {
+      updateOn: 'submit'
+    })
+
+  }
   getCurrentLocation(){
     return new Promise((resolve, reject) => {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.myCoords = resp.coords;
       console.log("mycoords", this.myCoords);
+      this.lat.setValue(this.myCoords['latitude']);
+      this.long.setValue(this.myCoords['longitude']);
       resolve();
       // resp.coords.longitude
      }).catch((error) => {
@@ -98,5 +150,39 @@ export class SetParkingSpotPage implements OnInit {
 
   unsubscribe(){
     this.rest.stopWatchingPosition();
+  }
+
+  addParking(){
+
+    this.hideButton = true;
+    if(this.parkingForm.valid){
+      console.log("valido", this.parkingForm.value);
+      this.sendData();
+    }else{
+     console.log("invalido");
+      this.hideButton = false;
+    }
+
+  }
+
+  sendData(){
+    console.log("What to send")
+    this.rest.sendData("/api/addparking", this.parkingForm.value).subscribe(val => {
+      this.presentToast("Your parking has been added");
+      this.hideButton = false;
+   
+    }, error => {
+      this.presentToast(error);
+      this.hideButton = false;
+
+    })
+  }
+
+  async presentToast(msg) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
   }
 }

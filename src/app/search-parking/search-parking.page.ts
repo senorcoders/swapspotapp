@@ -37,6 +37,7 @@ export class SearchParkingPage implements OnInit {
         console.log("response", data, jwr);
         that._sailsService.on('new_location').subscribe(entry => {
           console.log("new entry", entry);
+          that.addMarkersToMap({x: entry['lat'], y: entry['long']});
         })
       })
       await this.getCurrentLocation();
@@ -158,6 +159,7 @@ export class SearchParkingPage implements OnInit {
 
     calculateAndDisplayRoute(position) {
       console.log("position", position);
+      this.closePopup();
       const that = this;
       this.directionsService.route({
         origin: {
