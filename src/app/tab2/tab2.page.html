@@ -1,9 +1,89 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Tab Two
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+  <div class="login-bg access-register"></div>
+
+
+  <div class="container login-area">
+    <div class="section">
+      <form [formGroup]="updateForm" (submit)="update()">
+
+    <div class="row ">
+                <div class="col s12 pad-0"><h5 class="bot-20 sec-tit center white-text">Account Details</h5>
+      <div class="row">
+
+        <div class="input-field col s10 offset-s1">
+          <input formControlName="name" id="name3" type="text" class="validate">
+          <label for="name3">Name</label>
+        </div>
+        <div class="validation-errors col s10 offset-s1">
+          <ng-container *ngFor="let validation of validation_messages.field">
+            <div class="error-message" *ngIf="updateForm.get('name').hasError(validation.type) && (updateForm.get('name').dirty || updateForm.get('name').touched)">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+     
+      </div>
+
+      <div class="row">
+
+        <div class="input-field col s10 offset-s1">
+          <input formControlName="email"  id="email3" type="email" class="validate">
+          <label for="email3">Email</label>
+        </div>
+
+        <div class="validation-errors col s10 offset-s1">
+          <ng-container *ngFor="let validation of validation_messages.field">
+            <div class="error-message" *ngIf="updateForm.get('email').hasError(validation.type) && (updateForm.get('email').dirty || updateForm.get('email').touched || updateForm.get('email').hasError('email'))">
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+     
+      </div>
+
+
+      <div class="row">
+
+        <div class="input-field col s10 offset-s1">
+          <ion-item>
+            <ion-label position="floating">Birthdate</ion-label>
+            <ion-datetime displayFormat="MM/DD/YYYY" formControlName="birthdate"></ion-datetime>
+          </ion-item>
+        </div>
+
+      
+     
+      </div>
+
+     
+
+     
+
+     
+
+
+      <div class="row center">
+        <button type="submit" [disabled]="hideButton" class="waves-effect waves-light btn-large bg-primary">Update <ion-spinner *ngIf="hideButton"  name="bubbles"></ion-spinner> </button>
+        <div class="spacer"></div>
+     
+        <div class="spacer"></div>
+     
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+
+
+       </div>
+
+    </div>
+    </div>
+  </form>
+
+
+    </div>
+  </div>
+</ion-content>
