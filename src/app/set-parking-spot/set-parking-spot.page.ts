@@ -49,9 +49,9 @@ export class SetParkingSpotPage implements OnInit {
 
   }
 
-  getUserInfo(){
+  getEmail(){
     return new Promise((resolve, reject) => {
-      this.storageProvider.get('userid').then(res => {
+      this.storageProvider.get('email').then(res => {
         this.email_st = res;
         console.log("userid", this.email_st);
         this.email.setValue(this.email_st);
@@ -61,9 +61,9 @@ export class SetParkingSpotPage implements OnInit {
     })
   }
 
-  getEmail(){
+  getUserInfo(){
     return new Promise((resolve, reject) => {
-      this.storageProvider.get('email').then(res => {
+      this.storageProvider.get('userid').then(res => {
         this.userid_st = res;
         console.log("email", this.userid_st);
         this.userid.setValue(this.userid_st);
