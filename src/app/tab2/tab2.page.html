@@ -66,22 +66,19 @@
 
       <div class="row center">
         <button type="submit" [disabled]="hideButton" class="waves-effect waves-light btn-large bg-primary">Update <ion-spinner *ngIf="hideButton"  name="bubbles"></ion-spinner> </button>
-        <div class="spacer"></div>
-     
-        <div class="spacer"></div>
-     
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-
-
        </div>
+
+       
+  <div class="row center">
+    <button (click)="logout()" type="button" class="waves-effect waves-light btn-large bg-primary danger" color="danger">Logout</button>
+
+  </div>
 
     </div>
     </div>
   </form>
+
+
 
 
     </div>

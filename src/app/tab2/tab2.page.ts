@@ -125,4 +125,14 @@ export class Tab2Page {
     toast.present();
   }
 
+  logout(){
+    this.storageProvider.remove('email');
+    this.storageProvider.remove('login');
+    this.storageProvider.remove('team');
+    this.storageProvider.remove('userid');
+    localStorage.removeItem('login');
+    this.router.navigate(['']);
+
+
+  }
 }
