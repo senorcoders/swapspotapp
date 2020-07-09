@@ -3,6 +3,7 @@ import { SailsService } from 'angular2-sails';
 import { environment } from 'src/environments/environment';
 import { RestService } from '../rest.service';
 import { StorageproviderService } from '../storageprovider.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
@@ -17,7 +18,8 @@ export class Tab3Page {
 
   constructor(private _sailsService:SailsService,
     private rest: RestService,
-    private storageProvider: StorageproviderService) {}
+    private storageProvider: StorageproviderService,
+    private toastController: ToastController) {}
 
  async ngOnInit() {
     this.type = 'received';
@@ -27,7 +29,12 @@ export class Tab3Page {
         console.log("response", data, jwr);
         that._sailsService.on('new_message').subscribe(entry => {
           console.log("new message", entry);
-          that.received.push(entry);
+          if(entry['receiver'] == that.useremail){
+            that.received.push(entry);
+
+          }else{
+            that.sent.push(entry);
+          }
         })
       })
 
@@ -63,6 +70,35 @@ export class Tab3Page {
       this.sent = res;
       console.log("msg", this.received);
     })
+  }
+
+
+  sendMessage(data, status){
+    let sntMsg;
+    if(status == 'accept'){
+      sntMsg = 'Your request for swap spots has been accepted';
+    }else{
+      sntMsg = 'Your request for swap spots has been denied';
+
+    }
+
+    let info = {
+      sender: this.useremail,
+      receiver: data.sender,
+      message: sntMsg
+    };
+    this.rest.sendData('/api/message', info).subscribe(res => {
+      console.log("mensaje enviado", res);
+      this.presentToast("Your response for swap spots has been sent.");
+    })
+  }
+
+  async presentToast(msg) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000
+    });
+    toast.present();
   }
 
 }
