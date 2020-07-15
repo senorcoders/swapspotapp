@@ -22,8 +22,10 @@ export class SearchParkingPage implements OnInit {
   parkings:any = [];
   myCoords:any;
   showPopup:boolean = false;
+  showInstructions:boolean = false;
   markerEmail_tmp:any;
   useremail:any;
+  instructions:any = [];
   constructor(public zone: NgZone, 
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
@@ -192,6 +194,9 @@ export class SearchParkingPage implements OnInit {
       }, (response, status) => {
         if (status === 'OK') {
           that.directionsDisplay.setDirections(response);
+          this.instructions = response['routes'][0]['legs'][0]['steps'];
+          console.log("response", response, this.instructions);
+
         } else {
           console.log('Directions request failed due to ' + status);
         }
@@ -222,5 +227,18 @@ export class SearchParkingPage implements OnInit {
         duration: 2000
       });
       toast.present();
+    }
+
+    showInstructionsFn(coords){
+      let that = this;
+      this.calculateAndDisplayRoute(coords);
+      setTimeout(() => {
+        that.showInstructions = true;
+
+      }, 2000);
+    }
+
+    closeInstructions(){
+      this.showInstructions = false;
     }
 }

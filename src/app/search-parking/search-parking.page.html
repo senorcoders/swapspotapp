@@ -36,8 +36,24 @@
           <button (click)="calculateAndDisplayRoute(tmpCoord)">Drive Here</button>
         </div>
         <div class="col-lg-6">
+          <button (click)="showInstructionsFn(tmpCoord)">See Driving Instructions</button>
+        </div>
+        <div class="col-lg-6">
           <button (click)="sendRequest()">Reserve this spot</button>
         </div>
+      </div>
+    </div>
+
+    <div class="map-popup"  [hidden]="!showInstructions">
+      <button class="close-popup" (click)="closeInstructions()"><ion-icon name="close-circle-outline" size="large"></ion-icon></button>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <ul>
+            <li *ngFor="let i of instructions" [innerHTML]="i.instructions"></li>
+          </ul>
+        </div>
+        
       </div>
     </div>
 
