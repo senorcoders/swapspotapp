@@ -6,6 +6,7 @@ import { MapsAPILoader } from '@agm/core';
 import { SailsService } from 'angular2-sails';
 import { environment } from 'src/environments/environment';
 import { StorageproviderService } from '../storageprovider.service';
+import { HaversineService, GeoCoord } from 'ng2-haversine';
 declare const google: any;
 @Component({
   selector: 'app-search-parking',
@@ -35,7 +36,8 @@ export class SearchParkingPage implements OnInit {
     private ngZone: NgZone,
     private _sailsService:SailsService,
     private storageProvider: StorageproviderService,
-    private toastController: ToastController) { }
+    private toastController: ToastController,
+    private _haversineService: HaversineService) { }
 
     async ngOnInit() {
       
@@ -201,6 +203,37 @@ export class SearchParkingPage implements OnInit {
           console.log('Directions request failed due to ' + status);
         }
       });
+
+      let watch = this.geolocation.watchPosition();
+        watch.subscribe((data) => {
+        // data can be a set of coordinates, or an error (if an error occurred).
+        // data.coords.latitude
+        // data.coords.longitude
+        console.log("live geo", data.coords, position);
+        let spotPosition: GeoCoord = {
+          latitude: position.x,
+          longitude: position.y
+      };
+        let myLivePosition: GeoCoord = {
+          latitude: data.coords.latitude,
+          longitude: data.coords.longitude
+      };
+
+        let distanceInMeters = this._haversineService.getDistanceInMeters(myLivePosition, spotPosition);
+        console.log("distance", distanceInMeters);
+        if(distanceInMeters < 40){
+          let data = {
+            sender: this.useremail,
+            receiver: this.markerEmail_tmp,
+            message: "I am taking the spot"
+          };
+          this.rest.sendData('/api/message', data).subscribe(res => {
+            console.log("mensaje enviado", res);
+            this.closePopup();
+            this.presentToast("Your requests for swap spots has been sent. Check your inbox to see responses.");
+          })
+        }
+        });
     }
 
     closePopup(){

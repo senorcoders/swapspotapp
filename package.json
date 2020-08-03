@@ -36,6 +36,7 @@
     "core-js": "^2.5.4",
     "ionic2-google-places-autocomplete": "^1.0.2",
     "ionic4-auto-complete": "^2.6.0",
+    "ng2-haversine": "^0.1.1",
     "ngx-socket-io": "^3.2.0",
     "rxjs": "~6.5.1",
     "socket.io-client": "^2.3.0",

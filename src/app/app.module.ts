@@ -15,6 +15,7 @@ import { LoginService } from './login.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { AutoCompleteModule } from 'ionic4-auto-complete';
 import {SailsModule} from "angular2-sails";
+import { HaversineService } from "ng2-haversine";
 
 import { environment } from 'src/environments/environment';
 @NgModule({
@@ -36,7 +37,8 @@ import { environment } from 'src/environments/environment';
       provide: HTTP_INTERCEPTORS,
       useClass: Interceptor,
       multi: true
-    }
+    },
+    HaversineService
   ],
   bootstrap: [AppComponent]
 })
