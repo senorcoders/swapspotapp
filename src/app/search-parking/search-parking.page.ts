@@ -129,7 +129,7 @@ export class SearchParkingPage implements OnInit {
       const mapOptions = {
         center: latLng,
         disableDefaultUI: true,
-        zoom: 19,
+        zoom: 17,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
   
@@ -153,7 +153,7 @@ export class SearchParkingPage implements OnInit {
     addMarkersToMap(parking) {
       console.log(parking);
       let that = this;
-      const position = new google.maps.LatLng(parking.x, parking.y);
+      const position = new google.maps.LatLng(parking.lat, parking.long);
       const mySpot = new google.maps.LatLng(this.myCoords.latitude, this.myCoords.longitude);
       const parkingMarker = new google.maps.Marker({ position, title: "Parking", icon: 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png'});
       const contentString = '<div id="content">' +
